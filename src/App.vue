@@ -1,7 +1,14 @@
 <template>
-  <main></main>
+  	<TaskList />
 </template>
 
-<script lang="ts" setup>
-
+<script setup lang="ts">
+import TaskList from "@/features/Task/components/Block/TaskList/index.vue";
 </script>
+
+<style scoped>
+body {
+	font-family: "Inter", sans-serif;
+	background-color: #f9f9f9;
+}
+</style>
