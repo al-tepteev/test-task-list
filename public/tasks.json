@@ -1,0 +1,7 @@
+[
+  { "id": 1, "title": "Сделать кофе", "done": false },
+  { "id": 2, "title": "Изучить Vue 3", "done": false },
+  { "id": 3, "title": "Создать SPA-приложение", "done": false },
+  { "id": 4, "title": "Стилизовать компоненты", "done": false },
+  { "id": 5, "title": "Протестировать приложение", "done": false }
+]
