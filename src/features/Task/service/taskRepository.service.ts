@@ -1,22 +1,43 @@
 import type { Task } from "../types/ITask";
 
-const TASKS_STORAGE_KEY = "tasks";
+const TASK_STATUS_KEY = "task_status_map";
+
+function readStatusMap(): Record<number, boolean> {
+  try {
+    return JSON.parse(localStorage.getItem(TASK_STATUS_KEY) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function writeStatusMap(map: Record<number, boolean>) {
+  localStorage.setItem(TASK_STATUS_KEY, JSON.stringify(map));
+}
 
 export const taskService = {
   async fetchTasks(): Promise<Task[]> {
-    const local = localStorage.getItem(TASKS_STORAGE_KEY);
-    
-    if (local) {
-      return JSON.parse(local);
-    }
-
     const response = await fetch("/tasks.json");
-    const tasks = await response.json();
-    this.saveTasks(tasks);
-    return tasks;
+    const tasks: Task[] = await response.json();
+
+    const statusMap = readStatusMap();
+    return tasks.map(t => ({
+      ...t,
+      done: statusMap[t.id] ?? t.done
+    }));
   },
 
-  saveTasks(tasks: Task[]) {
-    localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks));
+  saveStatus(id: number, done: boolean) {
+    const map = readStatusMap();
+    
+    map[id] = done;
+    writeStatusMap(map);
+  },
+  saveAllStatuses(tasks: Task[]) {
+    const map: Record<number, boolean> = {};
+
+    tasks.forEach(t => {
+      map[t.id] = t.done;
+    });
+    writeStatusMap(map);
   }
 };

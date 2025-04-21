@@ -16,15 +16,10 @@ export const useTaskStore = defineStore("task", {
 
     toggleTask(id: number) {
       const task = this.tasks.find(t => t.id === id);
+      if (!task) return;
 
-      if (task) {
-        task.done = !task.done;
-        this.saveTasks();
-      }
-    },
-
-    async saveTasks() {
-      await taskService.saveTasks(this.tasks);
+      task.done = !task.done;
+      taskService.saveStatus(id, task.done);
     }
   }
 });
